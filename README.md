@@ -1,3 +1,4 @@
 # gStoreD System
-基于gStore(https://github.com/pkumod/gStore)开发，待更
+基于gStore开发，待更
+gStore(https://github.com/pkumod/gStore)
 
