@@ -109,19 +109,31 @@ main(int argc, char * argv[])
 		printf("query is:\n%s\n\n", query.c_str());
 		ResultSet _rs;
 		FILE* ofp = stdout;
+<<<<<<< HEAD
 		/*if (argc >= 4)
 		{
 			ofp = fopen(argv[3], "w");
 		}*/
+=======
+		if (argc >= 4)
+		{
+			ofp = fopen(argv[3], "w");
+		}
+>>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 		string msg;
 		int ret = _db.query(query, _rs, ofp);
 		if(argc >= 4)
 		{
+<<<<<<< HEAD
 			ofstream out(argv[3]);
 			out<<_rs.to_str();
 			out.close();
 			//fclose(ofp);
 			//ofp = NULL;
+=======
+			fclose(ofp);
+			ofp = NULL;
+>>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 		}
 		// cout<<_rs.to_str();
 		//cout<<"gquery ret: "<<ret<<endl;

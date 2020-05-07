@@ -617,13 +617,22 @@ QueryTree::getWholeQuery(string& _query)
 	for(set<string>::iterator it=queryPoint.begin();it!=queryPoint.end();it++)start+=*it+" ";
 	_query=start+"where {\n"+sparql+"}";
 }
+<<<<<<< HEAD
 int 
 QueryTree::checkStar(vector<decompose_query_result>& result,set<string>& crossingEdge,unordered_map<string,int>& edge_cnt)
+=======
+bool 
+QueryTree::checkStar(vector<decompose_query_result>& result,set<string>& crossingEdge,map<string,int>& edge_cnt)
+>>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 {
 	vector<QueryTree::GroupPattern::SubGroupPattern> p_vec = this->getGroupPattern().sub_group_pattern;
 	
 	if(p_vec.size() <= 1)
+<<<<<<< HEAD
 		return 1;
+=======
+		return true;
+>>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 	
 	string center_var="";
 	if(p_vec[0].pattern.subject.value.compare(p_vec[1].pattern.subject.value) == 0 || p_vec[0].pattern.subject.value.compare(p_vec[1].pattern.object.value) == 0){
@@ -639,7 +648,11 @@ QueryTree::checkStar(vector<decompose_query_result>& result,set<string>& crossin
 			break;
 		}
 	}
+<<<<<<< HEAD
 	if(flag)return 1;
+=======
+	if(flag)return true;
+>>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 
 	map<string,int>valueToID;
 	int ID=0;
@@ -689,7 +702,11 @@ QueryTree::checkStar(vector<decompose_query_result>& result,set<string>& crossin
 		}
 		if(!flag)break;
 	}
+<<<<<<< HEAD
 	if(flag)return -1;
+=======
+	if(flag)return true;
+>>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 
 	vector<int> IDToBlock(ID+1);
 	int block=0;
@@ -753,7 +770,11 @@ QueryTree::checkStar(vector<decompose_query_result>& result,set<string>& crossin
 				it=result[i].connection.erase(it);
 
 	}
+<<<<<<< HEAD
 	return 0;
+=======
+	return false;
+>>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 }
 
 bool 

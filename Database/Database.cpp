@@ -1727,6 +1727,24 @@ Database::query(const string _query, ResultSet& _result_set, FILE* _fp, bool upd
 	return success_num;
 }
 
+<<<<<<< HEAD
+=======
+int 
+Database::decompose_query(const string _query,vector<decompose_query_result>& result,set<string>& crossingEdge,map<string,int>& edge_cnt)
+{
+	GeneralEvaluation general_evaluation(this->vstree, this->kvstore, this->stringindex, this->query_cache, this->pre2num, this->pre2sub, this->pre2obj, this->limitID_predicate, this->limitID_literal,this->limitID_entity);
+
+    long tv_begin = Util::get_cur_time();
+
+	if (!general_evaluation.parseQuery(_query))
+		return -1;
+    long tv_parse = Util::get_cur_time();
+    
+    //0 means that the query is not star, and 1 means that the query is a star
+	if(general_evaluation.getQueryTree().checkStar(result,crossingEdge,edge_cnt) == 0)return 0;
+	return 1;
+}
+>>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 
 //NOTICE+QUERY:to save memory for large cases, we can consider building one tree at a time(then release)
 //Or read the rdf file on separate segments

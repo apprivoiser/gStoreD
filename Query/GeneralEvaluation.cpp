@@ -100,7 +100,11 @@ bool GeneralEvaluation::parseQuery(const string &_query)
 	return true;
 }
 
+<<<<<<< HEAD
 int GeneralEvaluation::decompose_query(string& _query,vector<decompose_query_result>& result,set<string>& crossingEdge,unordered_map<string,int>& edge_cnt)
+=======
+bool GeneralEvaluation::decompose_query(string& _query,vector<decompose_query_result>& result,set<string>& crossingEdge,map<string,int>& edge_cnt)
+>>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 {
 	try
 	{
@@ -111,11 +115,18 @@ int GeneralEvaluation::decompose_query(string& _query,vector<decompose_query_res
 		printf("%s\n", e);
 		return false;
 	}
+<<<<<<< HEAD
 	int ret=this->query_tree.checkStar(result,crossingEdge,edge_cnt);
 	if(ret==0)
 		return false;
 	this->query_tree.getWholeQuery(_query);
 	return ret;
+=======
+	if(this->query_tree.checkStar(result,crossingEdge,edge_cnt) == 0)
+		return false;
+	this->query_tree.getWholeQuery(_query);
+	return true;
+>>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 }
 
 bool GeneralEvaluation::decompose_query(string& _query,vector<decompose_query_result>& result)
@@ -146,7 +157,13 @@ bool GeneralEvaluation::decompose_query_VP(string& _query,vector<decompose_query
 		printf("%s\n", e);
 		return false;
 	}
+<<<<<<< HEAD
 	return this->query_tree.checkStar_VP(result);
+=======
+	if(this->query_tree.checkStar_VP(result) == 0)
+		return false;
+	return true;
+>>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 }
 
 QueryTree& GeneralEvaluation::getQueryTree()

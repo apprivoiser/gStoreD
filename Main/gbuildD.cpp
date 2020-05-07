@@ -92,6 +92,7 @@ int main(int argc, char* argv[])
                 
                 if(!triple_array[i].isObjEntity())
                 {
+<<<<<<< HEAD
                     _obj=_obj.substr(1,_obj.size()-2);
                     string::iterator it = _obj.begin(); 
                     while(it!=_obj.end())
@@ -100,6 +101,19 @@ int main(int argc, char* argv[])
                         it++;
                     }
                     _obj="\""+_obj+"\"";
+=======
+                    int ed=_obj.length()-1;
+                    while(_obj[ed]!='"')ed--;
+                    string _tmp=_obj.substr(1,ed-1);
+                    _obj=_obj.substr(ed+1,_obj.size()-ed-1);
+                    string::iterator it = _tmp.begin(); 
+                    while(it!=_tmp.end())
+                    {
+                        if(*it=='"'||*it=='\\'){it=_tmp.insert(it,'\\');it++;}
+                        it++;
+                    }
+                    _obj="\""+_tmp+"\""+_obj;
+>>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
                 }
 
                 bool flag=0;
