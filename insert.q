@@ -1,0 +1,1 @@
+insert data{ <lubm_metis> <triple> "99550" .<lubm_metis> <entity> "28413" .<lubm_metis> <label> "17" .}
