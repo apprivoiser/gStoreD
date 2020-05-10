@@ -35,10 +35,7 @@ int main(int argc, char * argv[])
 		for(int p=1;p<numprocs;p++)
 			MPI_Send(&size, 1, MPI_INT, p, 10, MPI_COMM_WORLD);
 
-<<<<<<< HEAD
 		long all_time;
-=======
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 		long _begin = Util::get_cur_time();
 		string db_folder=string(argv[1]);
 		string sparql=string(argv[2]);
@@ -58,21 +55,13 @@ int main(int argc, char * argv[])
 	    {
 	    	string crossingEdge_file=string(argv[4]);
 	    	set<string> crossingEdge;
-<<<<<<< HEAD
 		    unordered_map<string,int> edge_cnt;
-=======
-		    map<string,int> edge_cnt;
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 		    ifstream infile(crossingEdge_file.c_str());
 		    string buff;
 		    while(getline(infile,buff))
 		    {
 		        vector<string> tmp=Util::split(buff,"\t");
-<<<<<<< HEAD
 		        // edge_cnt[tmp[0]]=atoi(tmp[1].c_str());
-=======
-		        edge_cnt[tmp[0]]=atoi(tmp[1].c_str());
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 		        if(tmp[2].compare("1")==0)crossingEdge.insert(tmp[0]);
 		    }
 		    infile.close();
@@ -81,37 +70,27 @@ int main(int argc, char * argv[])
 	    else if(type.compare("1")==0)
 	    {
 	    	star=general_evaluation.decompose_query(sparql,result);
-<<<<<<< HEAD
 	    	// cout<<sparql<<endl;
-=======
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 	    }
 	    long decompose_query_cost_parse = Util::get_cur_time();
 		cout << "decompose_query_cost used " << (decompose_query_cost_parse - decompose_query_cost_begin) << "ms." << endl;
 
-<<<<<<< HEAD
 		int query_ans_cnt=0;
+		int Var_cnt=0;
 	    set<vector<int> > query_ans_hash;
 	    unordered_map<string,int> URIIDMap;
+	   	unordered_map<string,int> Var;
 	    vector<string> IDURIMap;
 	    IDURIMap.push_back("");
 	    // unsigned long long _buffer_size;
 	    // SITree* URIIDMap=new SITree(".", string("URIIDMap"), "new", _buffer_size);
-=======
-	    set<vector<int> > query_ans_hash;
-	    map<string,int> URIIDMap;
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 	    int URIID=0;
 	    if(star==0) //not star
 	    {   	
 			//----------------------------------------------send query-----------------------------------------------------
 			long send_query_begin = Util::get_cur_time();
 			set<string> knownPoint;
-<<<<<<< HEAD
 			vector<unordered_map<string,int> > queryPoint(result.size(),unordered_map<string,int>());
-=======
-			vector<map<string,int> > queryPoint(result.size(),map<string,int>());
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 			stringstream query_ss;
 			vector<vector<vector<string> > > block_result(result.size(),vector<vector<string> >());
 			for(int i=1;i<result.size();i++)block_result[i].push_back(vector<string>());
@@ -127,30 +106,18 @@ int main(int argc, char * argv[])
 					if(tmp[0][0]=='?')
 					{
 						if(queryPoint[i].count(tmp[0])==0)
-<<<<<<< HEAD
 							queryPoint[i].emplace(tmp[0],1);
-=======
-							queryPoint[i][tmp[0]]=1;
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 					}
 					else knownPoint.insert(tmp[0]);
 					if(tmp[1][0]=='?')
 					{
 						if(queryPoint[i].count(tmp[1])==0)
-<<<<<<< HEAD
 							queryPoint[i].emplace(tmp[1],1);
-=======
-							queryPoint[i][tmp[1]]=1;
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 					}
 					if(tmp[2][0]=='?')
 					{
 						if(queryPoint[i].count(tmp[2])==0)
-<<<<<<< HEAD
 							queryPoint[i].emplace(tmp[2],1);
-=======
-							queryPoint[i][tmp[2]]=1;
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 					}
 					else knownPoint.insert(tmp[2]);
 					ssparql+=result[i].edge[j]+" .\n";
@@ -158,11 +125,12 @@ int main(int argc, char * argv[])
 				if(queryPoint[i].size())
 				{
 					string start="select ";
-<<<<<<< HEAD
-					for(unordered_map<string,int>::iterator it=queryPoint[i].begin();it!=queryPoint[i].end();it++) it->second=queryPoint_cnt++,start+=it->first+" ";
-=======
-					for(map<string,int>::iterator it=queryPoint[i].begin();it!=queryPoint[i].end();it++) it->second=queryPoint_cnt++,start+=it->first+" ";
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
+					for(unordered_map<string,int>::iterator it=queryPoint[i].begin();it!=queryPoint[i].end();it++) 
+					{
+						it->second=queryPoint_cnt++,start+=it->first+" ";
+						if(Var.count(it->first)==0)
+							Var.emplace(it->first,++Var_cnt);
+					}
 					ssparql=start+"where {\n"+ssparql+"}";
 					cout<<ssparql<<endl;
 					query_ss<<ssparql<<"-1";
@@ -192,12 +160,7 @@ int main(int argc, char * argv[])
 
 	    	//----------------------------------------receive local result--------------------------------------------------
 	    	long receive_local_result_begin = Util::get_cur_time();
-<<<<<<< HEAD
 	    	unordered_map<unsigned long long,vector<int> >* connectionToBlock=new unordered_map<unsigned long long,vector<int> >[result.size()];
-=======
-	    	// map<unsigned long long,vector<int>* >* connectionToBlock=new map<unsigned long long,vector<int>* >[result.size()];
-	    	map<unsigned long long,vector<int> >* connectionToBlock=new map<unsigned long long,vector<int> >[result.size()];
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 	    	for(int p=1;p<numprocs;p++)
 	    	{
 	            for(int i=1;i<result.size();i++)if(queryPoint[i].size())
@@ -228,15 +191,14 @@ int main(int argc, char * argv[])
 	        	{
 	        		cout<<"final results:0"<<endl;
 	        		long _parse = Util::get_cur_time();
-<<<<<<< HEAD
 	        		all_time=_parse - _begin;
 					cout << "all used " << (_parse - _begin) << "ms." << endl;
 					ofstream write;
 				    write.open("ans.txt");
+				    for(unordered_map<string,int>::iterator it=Var.begin();it!=Var.end();it++)
+				    	write<<it->first<<" ";
+				    write<<endl;
 					write.close();
-=======
-					cout << "all used " << (_parse - _begin) << "ms." << endl;
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 	        		return 0;
 	        	}
 	        	for(int j=1;j<block_result[i].size();j++)
@@ -254,13 +216,7 @@ int main(int argc, char * argv[])
 						// hash_val=((hash_val<<4)&0x7FFFFFFF)|connection_block;
 						hash_val=(hash_val<<4)|connection_block;
 						if(connectionToBlock[i].count(hash_val)==0)
-<<<<<<< HEAD
 							connectionToBlock[i].emplace(hash_val,vector<int>());
-=======
-							// connectionToBlock[i][hash_val]=new vector<int>();
-							connectionToBlock[i][hash_val]=vector<int>();
-						// (*connectionToBlock[i][hash_val]).push_back(j);
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 						connectionToBlock[i][hash_val].push_back(j);
 					}
 	        	}
@@ -272,20 +228,14 @@ int main(int argc, char * argv[])
 			long join_begin = Util::get_cur_time();
 			int mn=block_result[1].size(),st=1;//find the start
 			for(int i=1;i<result.size();i++)
-<<<<<<< HEAD
 			{
-=======
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 				if(mn>block_result[i].size())
 				{
 					mn=block_result[i].size();
 					st=i;
 				}
-<<<<<<< HEAD
 				cout<<i<<" "<<block_result[i].size()<<endl;
 			}
-=======
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 
 			queue<pair<vector<int>,queue<int> > >q;
 			
@@ -304,33 +254,18 @@ int main(int argc, char * argv[])
 					if(tmp_queue.empty())	//get the result
 					{
 						// cout<<"final"<<endl;
-						vector<int> ansss;
-<<<<<<< HEAD
-						set<string> tmpx;
+						vector<int> ansss(Var.size());
 						for(int j=1;j<result.size();j++)
 						{
 							for(unordered_map<string,int>::iterator it=queryPoint[j].begin();it!=queryPoint[j].end();it++)
 							{
-								if(tmpx.count(it->first))
-									continue;
-								tmpx.insert(it->first);
 								string val=block_result[j][tmp_ans[j]][it->second];
 								if(URIIDMap.count(val)==0)
 		            			{
 		            				URIIDMap.emplace(val,++URIID);
 		            				IDURIMap.push_back(val);
-=======
-						for(int j=1;j<result.size();j++)
-						{
-							for(map<string,int>::iterator it=queryPoint[j].begin();it!=queryPoint[j].end();it++)
-							{
-								string val=block_result[j][tmp_ans[j]][it->second];
-								if(URIIDMap.count(val)==0)
-		            			{
-		            				URIIDMap[val]=++URIID;
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 		            			}
-		            			ansss.push_back(URIIDMap[val]);
+		            			ansss[Var[it->first]-1]=URIIDMap[val];
 							}
 						}
 						query_ans_hash.insert(ansss);
@@ -401,15 +336,18 @@ int main(int argc, char * argv[])
 			cout << "join used " << (join_parse - join_begin) << "ms." << endl;
 			
 			long _parse = Util::get_cur_time();
-<<<<<<< HEAD
 			all_time=_parse - _begin;
-=======
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 			cout << "all used " << (_parse - _begin) << "ms." << endl;
 			delete[] connectionToBlock;
 	    }
 	    else	//star
 	    {
+	    	vector<string> var=Util::split(sparql," ");
+	    	for(int i=1;i<var.size();i++)
+	    	{
+	    		if(var[i].compare("where")==0)break;
+	    		Var[var[i]]=++Var_cnt;
+	    	}
 	    	//----------------------------------------------send query-----------------------------------------------------
 			long send_query_begin = Util::get_cur_time();
 	    	sparql+="-1";
@@ -438,7 +376,6 @@ int main(int argc, char * argv[])
 			        if(strcmp(query_ans_arr, "done")==0) break;
         			vector<string> query_ans_tmp=Util::split(query_ans_arr,"\n");
         			// cout<<p<<" "<<query_ans_tmp.size()<<endl;
-<<<<<<< HEAD
 	            	// if(star==1)
 	            	if(1)
 	            	{
@@ -462,29 +399,12 @@ int main(int argc, char * argv[])
 	            	{
 	            		query_ans_cnt+=query_ans_tmp.size();
 	            	}
-=======
-	            	for(int i=0;i<query_ans_tmp.size();i++)
-					{
-						vector<string> tmpss=Util::split(query_ans_tmp[i],"\t");
-	            		vector<int> ansss;
-	            		for(int j=0;j<tmpss.size();j++)
-	            		{
-	            			if(URIIDMap.count(tmpss[j])==0)
-	            			{
-	            				URIIDMap[tmpss[j]]=++URIID;
-	            			}
-	            			ansss.push_back(URIIDMap[tmpss[j]]);
-	            		}
-	            		query_ans_hash.insert(ansss);
-					}
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 	            	delete[] query_ans_arr;
 	    		}
 	        }
 	        long receive_local_result_parse = Util::get_cur_time();
 			cout << "receive_local_result used " << (receive_local_result_parse - receive_local_result_begin) << "ms." << endl;
 			long _parse = Util::get_cur_time();
-<<<<<<< HEAD
 			all_time=_parse - _begin;
 			cout << "start!!! all used " << (_parse - _begin) << "ms." << endl;
 	    }
@@ -496,6 +416,9 @@ int main(int argc, char * argv[])
 
 	    ofstream write;
 	    write.open("ans.txt");
+	    for(unordered_map<string,int>::iterator it=Var.begin();it!=Var.end();it++)
+	    	write<<it->first<<" ";
+	    write<<endl;
 	    for(set<vector<int> >::iterator it=query_ans_hash.begin();it!=query_ans_hash.end();it++)
 	    {
 	    	vector<int> tmp=*it;
@@ -504,12 +427,6 @@ int main(int argc, char * argv[])
 	    	write<<endl;
 	    }
 		write.close();
-=======
-			cout << "start!!! all used " << (_parse - _begin) << "ms." << endl;
-	    }
-	    
-	    cout<<"final results:"<<query_ans_hash.size()<<endl;
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 	}
 	else	//local
 	{
@@ -555,7 +472,6 @@ int main(int argc, char * argv[])
 			// cout<<rs<<endl;
 			if(rs.compare("[empty result]\n"))
 			{
-<<<<<<< HEAD
 				long long st,ed;
 				st=0;
 				while(rs[st]!='\n')st++;
@@ -585,24 +501,6 @@ int main(int argc, char * argv[])
 		        MPI_Send(&size, 1, MPI_INT, 0, 10, MPI_COMM_WORLD);
 				MPI_Send(query_ans_arr, size, MPI_CHAR, 0, 10, MPI_COMM_WORLD);
 				delete[] query_ans_arr;	
-=======
-				vector<string> rs_vec=Util::split(rs,"\n");
-				stringstream query_ans;
-				for(int j=1;j<rs_vec.size();j++)
-				{
-					query_ans<<rs_vec[j]<<"\n";
-					if(j%5000000==0||j==rs_vec.size()-1)
-					{
-						char* query_ans_arr = new char[query_ans.str().size() + 1];
-						strcpy(query_ans_arr,query_ans.str().c_str());
-						size = strlen(query_ans_arr);
-				        MPI_Send(&size, 1, MPI_INT, 0, 10, MPI_COMM_WORLD);
-						MPI_Send(query_ans_arr, size, MPI_CHAR, 0, 10, MPI_COMM_WORLD);
-						delete[] query_ans_arr;	
-						query_ans.str("");
-					}
-				}
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 			}
 			char* _finished_tag = new char[10];
             strcpy(_finished_tag, "done");
