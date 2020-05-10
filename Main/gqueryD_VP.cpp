@@ -1,5 +1,5 @@
 /*=============================================================================
-# Filename: gqueryD.cpp
+# Filename: gqueryD_VP.cpp
 # Author: Cen Yan
 # Last Modified: 
 # Description: query
@@ -51,12 +51,8 @@ int main(int argc, char * argv[])
 
         //------------------------------------------decompose_query------------------------------------------------------
 	    long decompose_query_cost_begin = Util::get_cur_time();
-<<<<<<< HEAD
 	    long all_time;
 	    unordered_map<string,int> pre_pos;
-=======
-	    map<string,int> pre_pos;
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 	    ifstream infile(pre_pos_file.c_str());
 	    string buff;
 	    while(getline(infile,buff))
@@ -72,19 +68,14 @@ int main(int argc, char * argv[])
     	//----------------------------------------------send query-----------------------------------------------------
 		long send_query_begin = Util::get_cur_time();
 	    set<vector<int> > query_ans_hash;
-<<<<<<< HEAD
 	    unordered_map<string,int> URIIDMap;
+	    unordered_map<string,int> Var;
+	    int Var_cnt=0;
 	    int URIID=0;
 	    vector<string> IDURIMap;
 	    IDURIMap.push_back("");
 		set<string> knownPoint;
 		vector<unordered_map<string,int> > queryPoint(result.size(),unordered_map<string,int>());
-=======
-	    map<string,int> URIIDMap;
-	    int URIID=0;
-		set<string> knownPoint;
-		vector<map<string,int> > queryPoint(result.size(),map<string,int>());
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 		stringstream* query_ss = new stringstream[numprocs];
 		vector<vector<vector<string> > > block_result(result.size(),vector<vector<string> >());
 		for(int i=1;i<result.size();i++)block_result[i].push_back(vector<string>());
@@ -122,11 +113,12 @@ int main(int argc, char * argv[])
 			if(queryPoint[i].size())
 			{
 				string start="select ";
-<<<<<<< HEAD
-				for(unordered_map<string,int>::iterator it=queryPoint[i].begin();it!=queryPoint[i].end();it++) it->second=queryPoint_cnt++,start+=it->first+" ";
-=======
-				for(map<string,int>::iterator it=queryPoint[i].begin();it!=queryPoint[i].end();it++) it->second=queryPoint_cnt++,start+=it->first+" ";
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
+				for(unordered_map<string,int>::iterator it=queryPoint[i].begin();it!=queryPoint[i].end();it++)
+				{
+					if(Var.count(it->first)==0)
+						Var.emplace(it->first,++Var_cnt);
+					it->second=queryPoint_cnt++,start+=it->first+" ";
+				} 
 				ssparql=start+"where {\n"+ssparql+"}";
 				cout<<ssparql<<endl;
 				query_ss[pre_pos[tmp[1]]]<<ssparql<<"-1";
@@ -158,17 +150,10 @@ int main(int argc, char * argv[])
 		cout << "send_query used " << (send_query_parse - send_query_begin) << "ms." << endl;
     	
     	//----------------------------------------receive local result--------------------------------------------------
-<<<<<<< HEAD
 	    long receive_local_result_begin = Util::get_cur_time();
     	unordered_map<string,int> connectionToID;
     	int connectionID=0;
     	unordered_map<unsigned long long,vector<int> >* connectionToBlock=new unordered_map<unsigned long long,vector<int> >[result.size()];
-=======
-	    	long receive_local_result_begin = Util::get_cur_time();
-    	map<string,int> connectionToID;
-    	int connectionID=0;
-    	map<unsigned long long,vector<int> >* connectionToBlock=new map<unsigned long long,vector<int> >[result.size()];
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
     	for(int p=1;p<numprocs;p++)
     	{
             for(int i=0;i<queryToMachine[p].size();i++)if(queryPoint[queryToMachine[p][i]].size())
@@ -198,15 +183,14 @@ int main(int argc, char * argv[])
         	{
         		cout<<"final results:0"<<endl;
         		long _parse = Util::get_cur_time();
-<<<<<<< HEAD
         		all_time=(_parse - _begin);
 				cout << "all used " << (_parse - _begin) << "ms." << endl;
 				ofstream write;
 			    write.open("ans.txt");
+			    for(unordered_map<string,int>::iterator it=Var.begin();it!=Var.end();it++)
+			    	write<<it->first<<" ";
+			    write<<endl;
 				write.close();
-=======
-				cout << "all used " << (_parse - _begin) << "ms." << endl;
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
         		return 0;
         	}
         	for(int j=1;j<block_result[i].size();j++)
@@ -258,32 +242,18 @@ int main(int argc, char * argv[])
 				q.pop();
 				if(tmp_queue.empty())	//get the result
 				{
-					vector<int> ansss;
-<<<<<<< HEAD
-					set<string> tmpx;
+					vector<int> ansss(Var.size());
 					for(int j=1;j<result.size();j++)
 					{
 						for(unordered_map<string,int>::iterator it=queryPoint[j].begin();it!=queryPoint[j].end();it++)
 						{
-							if(tmpx.count(it->first))
-									continue;
-								tmpx.insert(it->first);
-=======
-					for(int j=1;j<result.size();j++)
-					{
-						for(map<string,int>::iterator it=queryPoint[j].begin();it!=queryPoint[j].end();it++)
-						{
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 							string val=block_result[j][tmp_ans[j]][it->second];
 							if(URIIDMap.count(val)==0)
 	            			{
 	            				URIIDMap[val]=++URIID;
-<<<<<<< HEAD
 	            				IDURIMap.push_back(val);
-=======
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 	            			}
-	            			ansss.push_back(URIIDMap[val]);
+	            			ansss[Var[it->first]-1]=URIIDMap[val];
 						}
 					}
 					query_ans_hash.insert(ansss);
@@ -353,7 +323,6 @@ int main(int argc, char * argv[])
 		cout << "join used " << (join_parse - join_begin) << "ms." << endl;
 		
 		long _parse = Util::get_cur_time();
-<<<<<<< HEAD
 		all_time=(_parse-_begin);
 		cout << "all used " << (_parse - _begin) << "ms." << endl;
 
@@ -362,6 +331,9 @@ int main(int argc, char * argv[])
 
 	    ofstream write;
 	    write.open("ans.txt");
+	    for(unordered_map<string,int>::iterator it=Var.begin();it!=Var.end();it++)
+	    	write<<it->first<<" ";
+	    write<<endl;
 	    for(set<vector<int> >::iterator it=query_ans_hash.begin();it!=query_ans_hash.end();it++)
 	    {
 	    	vector<int> tmp=*it;
@@ -370,22 +342,6 @@ int main(int argc, char * argv[])
 	    	write<<endl;
 	    }
 		write.close();
-=======
-		cout << "all used " << (_parse - _begin) << "ms." << endl;
-
-		//delete
-		// for(int i=1;i<result.size();i++)
-		// {
-		// 	for(map<unsigned long long,vector<int>* >::iterator it=connectionToBlock[i].begin();it!=connectionToBlock[i].end();)
-		// 	{
-		// 		delete it->second;
-		// 		it->second=NULL;
-		// 		it=connectionToBlock[i].erase(it);
-		// 	}
-		// }
-		delete[] connectionToBlock;
-	    cout<<"final results:"<<query_ans_hash.size()<<endl;
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 	}
 	else	//local
 	{
@@ -421,24 +377,6 @@ int main(int argc, char * argv[])
 			stringstream query_ans;
 			for(int i=0;i<ssparql.size();i++)
 			{
-<<<<<<< HEAD
-=======
-				// rs=gc.query(db_folder, "txt", ssparql[i]);
-				// {
-					// remove("local_ans.txt");
-					// gc.fquery(db_folder, "txt", ssparql[i], "local_ans.txt");
-					// string rs="";
-					// ifstream infile("local_ans.txt");
-			  //       string buff;
-			  //       while(getline(infile,buff))
-			  //       {
-			  //           rs+=buff+"\n";
-			  //       }
-			  //       infile.close();
-		        	// remove("local_ans.txt");
-		        // }
-				// cout<<ssparql[i]<<endl;
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 				ResultSet _rs;
 				long local_query_begin = Util::get_cur_time();
 				_db.query(ssparql[i], _rs, stdout);
@@ -450,7 +388,6 @@ int main(int argc, char * argv[])
 				// cout<<rs<<endl;
 				if(rs.compare("[empty result]\n"))
 				{
-<<<<<<< HEAD
 					long long st,ed;
 					st=0;
 					while(rs[st]!='\n')st++;
@@ -480,24 +417,6 @@ int main(int argc, char * argv[])
 			        MPI_Send(&size, 1, MPI_INT, 0, 10, MPI_COMM_WORLD);
 					MPI_Send(query_ans_arr, size, MPI_CHAR, 0, 10, MPI_COMM_WORLD);
 					delete[] query_ans_arr;	
-=======
-					vector<string> rs_vec=Util::split(rs,"\n");
-					stringstream query_ans;
-					for(int j=1;j<rs_vec.size();j++)
-					{
-						query_ans<<rs_vec[j]<<"\n";
-						if(j%5000000==0||j==rs_vec.size()-1)
-						{
-							char* query_ans_arr = new char[query_ans.str().size() + 1];
-							strcpy(query_ans_arr,query_ans.str().c_str());
-							size = strlen(query_ans_arr);
-					        MPI_Send(&size, 1, MPI_INT, 0, 10, MPI_COMM_WORLD);
-							MPI_Send(query_ans_arr, size, MPI_CHAR, 0, 10, MPI_COMM_WORLD);
-							delete[] query_ans_arr;	
-							query_ans.str("");
-						}
-					}
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 				}
 				char* _finished_tag = new char[10];
 	            strcpy(_finished_tag, "done");
