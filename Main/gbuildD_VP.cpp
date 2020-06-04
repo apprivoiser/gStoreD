@@ -6,7 +6,6 @@
 #include "../Database/Database.h"
 #include "../Util/Util.h"
 #include "../api/http/cpp/client.h"
-<<<<<<< HEAD
 void update(string RDF,int triples,int entityCnt,int label)
 {
     string info="insert data{ <"+RDF+"> <triple> \""+to_string(triples)+"\" .<"+RDF+"> <entity> \""+to_string(entityCnt)+"\" .<"+RDF+"> <label> \""+to_string(label)+"\" .}";
@@ -14,8 +13,6 @@ void update(string RDF,int triples,int entityCnt,int label)
     out<<info;
     out.close();
 }
-=======
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 int main(int argc, char* argv[])
 {
     int numprocs, myRank, source,namelen,size;
@@ -51,11 +48,8 @@ int main(int argc, char* argv[])
         partitionStart = MPI_Wtime();
         map<string,int>preToID;
         map<int,string>IDToPre;
-<<<<<<< HEAD
         set<string> entity;
         int triples=0;
-=======
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
         int preCnt=0;
         vector<pair<long long,int> >block;
         RDFParser _preparser(_fin);
@@ -135,20 +129,14 @@ int main(int argc, char* argv[])
             /* Process the Triple one by one */
             for(int i = 0; i < parse_triple_num; i ++)
             {
-<<<<<<< HEAD
                 triples++;
                 string _sub = triple_array[i].getSubject();
                 entity.insert(_sub);
-=======
-                
-                string _sub = triple_array[i].getSubject();
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
                 string _pre = triple_array[i].getPredicate();
                 string _obj = triple_array[i].getObject();
                 
                 if(!triple_array[i].isObjEntity())
                 {
-<<<<<<< HEAD
                     _obj=_obj.substr(1,_obj.size()-2);
                     string::iterator it = _obj.begin(); 
                     while(it!=_obj.end())
@@ -161,19 +149,6 @@ int main(int argc, char* argv[])
                 else
                 {
                     entity.insert(_obj);
-=======
-                    int ed=_obj.length()-1;
-                    while(_obj[ed]!='"')ed--;
-                    string _tmp=_obj.substr(1,ed-1);
-                    _obj=_obj.substr(ed+1,_obj.size()-ed-1);
-                    string::iterator it = _tmp.begin(); 
-                    while(it!=_tmp.end())
-                    {
-                        if(*it=='"'||*it=='\\'){it=_tmp.insert(it,'\\');it++;}
-                        it++;
-                    }
-                    _obj="\""+_tmp+"\""+_obj;
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
                 }
 
                 int pos=pre_pos[preToID[_pre]];
@@ -194,10 +169,7 @@ int main(int argc, char* argv[])
         delete[] _six_tuples_ss;
         delete[] triple_array;
         fin_.close();
-<<<<<<< HEAD
         update(argv[1],triples,entity.size(),preCnt);
-=======
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
     }
     else 
     {   
