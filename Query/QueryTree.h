@@ -9,10 +9,7 @@
 #ifndef _QUERY_QUERYTREE_H
 #define _QUERY_QUERYTREE_H
 
-<<<<<<< HEAD
 #include <unordered_map>
-=======
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 #include "../Util/Util.h"
 #include "Varset.h"
 
@@ -266,11 +263,8 @@ class QueryTree
 			bool checkSelectAggregateFunctionGroupByValid();
 
 			void getWholeQuery(std::string& _query);
-<<<<<<< HEAD
 			int checkStar(std::vector<decompose_query_result>& result,std::set<std::string>& crossingEdge,std::unordered_map<std::string,int>& edge_cnt);
-=======
 			bool checkStar(std::vector<decompose_query_result>& result,std::set<std::string>& crossingEdge,std::map<std::string,int>& edge_cnt);
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 			bool checkStar(std::vector<decompose_query_result>& result);
 			bool checkStar_VP(std::vector<decompose_query_result>& result);
 
@@ -278,4 +272,3 @@ class QueryTree
 };
 
 #endif // _QUERY_QUERYTREE_H
-
