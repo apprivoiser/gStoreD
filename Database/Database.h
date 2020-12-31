@@ -53,10 +53,8 @@ public:
 	void clear();
 	int query(const string _query, ResultSet& _result_set, FILE* _fp = stdout, bool update_flag = true);
 
-<<<<<<< HEAD
-=======
+
 	int decompose_query(const string _query,std::vector<decompose_query_result>& result,std::set<string>& crossingEdge,map<string,int>& edge_cnt);
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 	//1. if subject of _triple doesn't exist,
 	//then assign a new subid, and insert a new SigEntry
 	//2. assign new tuple_id to tuple, if predicate or object doesn't exist before too;
