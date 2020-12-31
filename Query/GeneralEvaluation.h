@@ -8,11 +8,6 @@
 
 #ifndef _QUERY_GENERALEVALUATION_H
 #define _QUERY_GENERALEVALUATION_H
-
-<<<<<<< HEAD
- 
-=======
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 #include "../VSTree/VSTree.h"
 #include "../KVstore/KVstore.h"
 #include "../StringIndex/StringIndex.h"
@@ -52,11 +47,8 @@ class GeneralEvaluation
 		{}
 
 		bool parseQuery(const std::string &_query);
-<<<<<<< HEAD
 		int decompose_query(std::string& _query,std::vector<decompose_query_result>& result,std::set<string>& crossingEdge,std::unordered_map<string,int>& edge_cnt);
-=======
 		bool decompose_query(std::string& _query,std::vector<decompose_query_result>& result,std::set<string>& crossingEdge,std::map<string,int>& edge_cnt);
->>>>>>> 0348316ba2f9c5895efe4549fd4dc256904c95a8
 		bool decompose_query(std::string& _query,std::vector<decompose_query_result>& result);
 		bool decompose_query_VP(std::string& _query,std::vector<decompose_query_result>& result);
 		QueryTree& getQueryTree();
